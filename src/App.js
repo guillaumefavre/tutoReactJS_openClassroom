@@ -10,6 +10,7 @@ class App extends Component {
   }
 
   render() {
+    const won = new Date().getSeconds() % 2 === 0;
     return (
       <div className="memory">
         <GuessCount guesses={0}/>
@@ -20,6 +21,7 @@ class App extends Component {
         <Card card="E" feedback="hidden" onClickCard={this.handleCardClick}/>
         <Card card="F" feedback="justMatched" onClickCard={this.handleCardClick}/>
         <Card card="G" feedback="hidden" onClickCard={this.handleCardClick}/>
+        {won && <p>Gagné !</p>}
       </div>
     )
   }
