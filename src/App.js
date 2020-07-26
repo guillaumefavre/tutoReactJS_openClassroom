@@ -21,7 +21,6 @@ class App extends Component {
       const card = candidates.pop()
       result.push(card, card)
     }
-    console.log(result)
     return shuffle(result)
   }
 
@@ -33,7 +32,7 @@ class App extends Component {
     const won = new Date().getSeconds() % 2 === 0
     return (
       <div className="memory">
-        <GuessCount guesses={0} />
+        <GuessCount guesses={0}/>
         {this.cards.map((card, index) => (
           <Card card={card} feedback="visible" key={index} onClickCard={this.handleCardClick}/>
         ))}
