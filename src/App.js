@@ -11,7 +11,12 @@ const SIDE = 6
 const SYMBOLS = '😀🎉💖🎩🐶🐱🦄🐬🌍🌛🌞💫🍎🍌🍓🍐🍟🍿'
 
 class App extends Component {
-  cards = this.generateCards()
+  state = {
+    cards: this.generateCards(),
+    currentPair: [],
+    guesses: 0,
+    matchedCardIndices: []
+  }
 
   generateCards() {
     const result = []
@@ -24,23 +29,59 @@ class App extends Component {
     return shuffle(result)
   }
 
-  handleCardClick(card) {
-    console.log(card, 'clicked')
+  // Arrow fx for binding
+  handleCardClick = index => {
+    console.log('handleCardClick')
+    const { currentPair } = this.state
+
+    if (currentPair.length === 2) {
+      //
+      return
+    }
+
+    if (currentPair.length === 0) {
+      // Première carte de la paire
+      this.setState({ currentPair: [index] })
+      return
+    }
+
+    this.handleNewPairClosedBy(index)
   }
 
   render() {
-    const won = new Date().getSeconds() % 2 === 0
+    const {cards, guesses, matchedCardIndices} = this.state
+    const won = matchedCardIndices.length === cards.length
     return (
       <div className="memory">
-        <GuessCount guesses={0}/>
-        {this.cards.map((card, index) => (
-          <Card card={card} feedback="visible" key={index} onClickCard={this.handleCardClick}/>
+        <GuessCount guesses={guesses}/>
+        {cards.map((card, index) => (
+          <Card 
+            card={card} 
+            feedback={this.getFeedbackForCard(index)}
+            key={index} 
+            index={index}
+            onClickCard={this.handleCardClick}/>
         ))}
 
         {won && <HallOfFame entries={FAKE_HOF}/>}
 
       </div>
     )
+  }
+
+  getFeedbackForCard(index) {
+    const { currentPair, matchedCardIndices } = this.state
+    const indexMatched = matchedCardIndices.includes(index)
+  
+    if (currentPair.length < 2) {
+      return indexMatched || index === currentPair[0] ? 'visible' : 'hidden'
+    }
+  
+    if (currentPair.includes(index)) {
+      return indexMatched ? 'justMatched' : 'justMismatched'
+    }
+  
+    return indexMatched ? 'visible' : 'hidden'
   }
 }
 

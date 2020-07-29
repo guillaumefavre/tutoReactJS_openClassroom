@@ -5,8 +5,8 @@ import './Card.css'
 
 const HIDDEN_SYMBOL = '❓'
 
-const Card = ({card, feedback, onClickCard}) => (
-    <div className={`card ${feedback}`} onClick={() => onClickCard(card)}>
+const Card = ({card, feedback, index, onClickCard}) => (
+    <div className={`card ${feedback}`} onClick={() => onClickCard(index)}>
         <span className="symbol">
             {feedback === 'hidden' ? HIDDEN_SYMBOL : card}
         </span>
@@ -21,6 +21,7 @@ Card.propTypes = {
         'justMatched',
         'justMismatched'
     ]).isRequired,
+    index: PropTypes.number.isRequired,
     onClickCard: PropTypes.func.isRequired
 }
 
